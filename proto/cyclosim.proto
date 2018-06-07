@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package cyclosimproto;
+
+message Cyclist {
+  int32 id = 1;
+
+  // Mass of the cyclist + bike system all together.
+  double mass = 2;  // [kg]
+
+  // Coefficient of drag * frontal area.
+  double cda = 3;  // [m]
+
+  // Coefficient of rolling resistance.
+  double crr = 4;  // [unitless]
+
+  // Drivetrain loss
+  double drivetrain_loss = 5;  // [unitless]
+
+  Constraints model = 6;
+}
+
+message Constraints {
+  // We model "available power" for a duration as djconnel does here:
+  // http://djconnel.blogspot.com/2014/01/
+  // These values should be obtained using a nonlinear least squares fit:
+  // P_component(t) = p_max*(1 - exp(-(t / tau)^alpha))*(tau / t)^alpha
+  double p_max_anerobic = 1;  // [w], reasonable value of 400 or so.
+  double p_max_aerobic = 2;   // [w], reasonable value of 280 or so.
+  double tau_anerobic = 3;    // [sec], reasonable value of 24s or so.
+  double tau_aerobic = 4;     // [sec], reasonable value of 12000s or so
+  double alpha_anerobic = 5;  // [unitless], reasonable value of 1.0
+  double alpha_aerobic = 6;   // [unitless], reasonable value of 0.5
+}
+
+// To fit the contraints model, we start off with "real cyclist data" -
+//
+
+message CoursePoint {
+  double lat = 1;  // [degrees]
+  double lon = 2;  // [degrees]
+  double alt = 3;  // [m]
+}
+
+message WeatherForecastPoint {
+  double wind_u = 1;       // [m/s in +east/-west direction]
+  double wind_v = 2;       // [m/s in +north/-south direction]
+  double dewpoint = 4;     // [K]
+  double temperature = 3;  // [K]
+  int32 time = 4;          // [s past unix epoch]
+}
+
+message SimulationParameters {
+  int32 start_timestamp = 1;        // [s past unix epoch]
+  int32 end_timestamp = 2;          // [s past unix epoch]
+  int32 stride = 3;                 // [s]
+  double decimation_threshold = 4;  // [m]
+
+  repeated CoursePoint course = 5;
+  repeated WeatherForecastPoint weather = 6;
+  repeated Cyclist team = 7;
+}

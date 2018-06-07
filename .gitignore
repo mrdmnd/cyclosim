@@ -1,0 +1,39 @@
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+*.swp
+bazel-bin
+bazel-genfiles
+bazel-out
+bazel-policygen
+bazel-testlogs
+compile_commands.json
+__pycache__
+tools/bazel-compilation-database/compile_commands.json
